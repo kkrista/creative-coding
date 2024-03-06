@@ -1,4 +1,4 @@
-<h1>Creative Coding - Making Visuals with JavaScript </h1>
+<h1>Creative Coding - Making Visuals with JavaScript </h1> 
 <p> Dynamic online course, where the world of programming comes to life through the vibrant lens of visual programming in JavaScript! Designed for both beginners and seasoned coders alike, this immersive learning experience offers a unique approach to mastering JavaScript by integrating visual elements into the coding journey.<p>
 
 
