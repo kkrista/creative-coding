@@ -1,29 +1,41 @@
 const canvasSketch = require("canvas-sketch");
 const random = require("canvas-sketch-util/random");
+const math = require("canvas-sketch-util/math");
+const Tweakpane = require("tweakpane");
 
 const settings = {
   dimensions: [1080, 1080],
+  animate: true,
 };
 
-let manager, image;
+const params = {
+  cells: 40,
+  freq: 0.001,
+  amp: 0.2,
+  frame: 0,
+  animate: true,
+  glyphs: "_=/",
+};
 
-let text = "A";
-let fontSize = 1200;
+let pane, manager, image;
+
+// let text = 'A';
+// let fontSize = 1200;
 let fontFamily = "serif";
 
 const typeCanvas = document.createElement("canvas");
 const typeContext = typeCanvas.getContext("2d");
 
-const sketch = ({ context, width, height }) => {
-  const cell = 20;
-  const cols = Math.floor(width / cell);
-  const rows = Math.floor(height / cell);
-  const numCells = cols * rows;
+const sketch = () => {
+  return ({ context, width, height, frame }) => {
+    const cell = params.cells;
+    const cols = Math.floor(width / cell);
+    const rows = Math.floor(height / cell);
+    const numCells = cols * rows;
 
-  typeCanvas.width = cols;
-  typeCanvas.height = rows;
+    typeCanvas.width = cols;
+    typeCanvas.height = rows;
 
-  return ({ context, width, height }) => {
     typeContext.fillStyle = "black";
     typeContext.fillRect(0, 0, cols, rows);
 
@@ -43,8 +55,8 @@ const sketch = ({ context, width, height }) => {
       const col = i % cols;
       const row = Math.floor(i / cols);
 
-      const x = col * cell + random.range(-cell, cell) * 0.5;
-      const y = row * cell + random.range(-cell, cell) * 0.5;
+      const x = col * cell;
+      const y = row * cell;
 
       const r = typeData[i * 4 + 0];
       const g = typeData[i * 4 + 1];
@@ -56,40 +68,47 @@ const sketch = ({ context, width, height }) => {
       context.font = `${cell * 2}px ${fontFamily}`;
       if (Math.random() < 0.1) context.font = `${cell * 6}px ${fontFamily}`;
 
-      context.fillStyle = "white";
+      context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      // context.fillStyle = `white`;
+
+      const f = params.animate ? frame : params.frame;
+      // const n = random.noise3D(x, y, f * 10, params.freq);
+      // const angle  = n * Math.PI * params.amp;
 
       context.save();
       context.translate(x, y);
       context.translate(cell * 0.5, cell * 0.5);
-
-      // context.fillRect(0, 0, cell, cell);
+      // context.rotate(angle);
 
       context.fillText(glyph, 0, 0);
 
       context.restore();
     }
-
-    context.drawImage(typeCanvas, 0, 0);
   };
 };
 
 const getGlyph = (v) => {
-  if (v < 50) return "";
-  if (v < 100) return "-";
-  if (v < 150) return "—";
-  if (v < 200) return "=";
+  // if (v < 50) return '';
+  // if (v < 100) return '.';
+  // if (v < 150) return '-';
+  // if (v < 200) return '+';
 
-  const glyphs = "Шевченко".split("");
-
-  return random.pick(glyphs);
+  return random.pick(params.glyphs.split(""));
 };
 
-const onKeyUp = (e) => {
-  // text = e.key.toUpperCase();
-  // manager.render();
-};
+const createPane = () => {
+  const pane = new Tweakpane.Pane();
+  let folder;
 
-// document.addEventListener('keyup', onKeyUp);
+  folder = pane.addFolder({ title: "Grid " });
+  folder.addInput(params, "cells", { min: 1, max: 50, step: 1 });
+
+  folder = pane.addFolder({ title: "Glyphs " });
+  folder.addInput(params, "glyphs");
+
+  folder.addInput(params, "animate");
+  folder.addInput(params, "frame", { min: 0, max: 999 });
+};
 
 const loadMeSomeImage = (url) => {
   return new Promise((resolve, reject) => {
@@ -101,8 +120,9 @@ const loadMeSomeImage = (url) => {
 };
 
 const start = async () => {
-  const url = "/image.jpg";
+  const url = "AIimages.png";
   image = await loadMeSomeImage(url);
+  pane = await createPane();
   manager = await canvasSketch(sketch, settings);
 };
 
