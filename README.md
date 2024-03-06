@@ -1,6 +1,4 @@
-Dynamic online course, where the world of programming comes to life through the vibrant lens of visual programming in JavaScript! Designed for both beginners and seasoned coders alike, this immersive learning experience offers a unique approach to mastering JavaScript by integrating visual elements into the coding journey.
-
-<h1> Dynamic online course, where the world of programming comes to life through the vibrant lens of visual programming in JavaScript! Designed for both beginners and seasoned coders alike, this immersive learning experience offers a unique approach to mastering JavaScript by integrating visual elements into the coding journey.</h1>
+<h1 style="color:pink;"> Dynamic online course, where the world of programming comes to life through the vibrant lens of visual programming in JavaScript! Designed for both beginners and seasoned coders alike, this immersive learning experience offers a unique approach to mastering JavaScript by integrating visual elements into the coding journey.</h1>
 
 
 <img width="413" alt="sketch01" src="https://github.com/kkrista/creative-coding/assets/78624317/db5fcb05-8d0d-4467-b7e5-0ea44307c1e5">
